@@ -24,8 +24,7 @@ class Solution(object):
                 continue
             if item not in self.locked_arr:
                 self.locked_arr.append(item)
-                # self.res.append(copy.deepcopy(self.locked_arr))
-                self.res += [self.locked_arr]
+                self.res.append(copy.deepcopy(self.locked_arr))
                 self.upload_set(nums)
                 self.locked_arr.remove(item)
 
