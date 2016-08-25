@@ -45,12 +45,11 @@ public class SurroundedRegions {
             }
         }
 
-        boolean[][] marked = new boolean[m][n];
+        int[][] marked = new int[m][n];
         Queue queue = new LinkedList();
         for (int i = 1; i < m-1; i++) {
             for (int j = 1; j < n-1; j++) {
-                if (!marked[i][j] && board[i][j] == 'O') {
-                    queue.clear();
+                if (marked[i][j] == 0 && board[i][j] == 'O') {
                     queue.add(new Point(i, j));
 //                    for (int k = 0; k < adj[i][j].size(); k++) {
 //                        Point p = (Point) adj[i][j].get(k);
@@ -64,24 +63,40 @@ public class SurroundedRegions {
         }
     }
 
-    private void bfs(Queue q, char[][] board, List[][] adj, boolean[][] marked) {
+    private void bfs(Queue q, char[][] board, List[][] adj, int[][] marked) {
         List<Point> points = new ArrayList<>();
         while (!q.isEmpty()) {
+            boolean flag = true;
             Point p = (Point) q.poll();
             int x = p.x;
             int y = p.y;
-            marked[x][y] = true;
+            marked[x][y] = 1;
 
             for (int i = 0; i < adj[x][y].size(); i++) {
                 Point adjPoint = (Point) adj[x][y].get(i);
-                if (!marked[adjPoint.x][adjPoint.y] && board[adjPoint.x][adjPoint.y] == 'O') {
+                if (marked[adjPoint.x][adjPoint.y] == 2) {
+                    flag = false;
+                    marked[x][y] = 2;
+                    break;
+                }
+                if (marked[adjPoint.x][adjPoint.y] == 0 && board[adjPoint.x][adjPoint.y] == 'O') {
                     if (adjPoint.x == 0 || adjPoint.x == board.length-1 || adjPoint.y == 0 || adjPoint.y == board[0].length-1) {
-                        return;
+                        flag = false;
+                        marked[x][y] = 2;
+                        break;
                     }
                     q.add(adjPoint);
                 }
             }
-            points.add(p);
+
+            if (flag) {
+                points.add(p);
+            } else {
+                for (int i = 0; i < points.size(); i++) {
+                    marked[points.get(i).x][points.get(i).y] = 2;
+                }
+                points.clear();
+            }
         }
 
         for (int i = 0; i < points.size(); i++) {
