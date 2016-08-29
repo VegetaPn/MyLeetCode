@@ -9,18 +9,10 @@ class Solution(object):
         :type wordDict: Set[str]
         :rtype: bool
         """
-        if not s:
-            return True
-
-        word_set = set()
-        for item in wordDict:
-            pos = s.find(item)
-            if pos >= 0:
-                if self.wordBreak(s[:pos], wordDict) and self.wordBreak(s[pos + len(item):], wordDict - word_set):
-                    return True
-            else:
-                word_set.add(item)
-        return False
+        is_break = [True]
+        for i in range(1, len(s) + 1):
+            is_break += any(is_break[j] and s[j:i] in wordDict for j in range(i)),
+        return is_break[-1]
 
 
 if __name__ == '__main__':
