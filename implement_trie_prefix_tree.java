@@ -1,6 +1,15 @@
+package xyz.yhngo.main;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+/**
+ * Created by Vegeta on 9/15/16.
+ */
 class TrieNode {
     // Initialize your data structure here.
     char val;
+    boolean isEnd = false;
     ArrayList<TrieNode> next = new ArrayList<>();
 
     public TrieNode() {
@@ -32,18 +41,21 @@ public class Trie {
                     isFound = true;
                     i++;
                     tn = curNode;
+                    if (i == word.length()) {
+                        curNode.isEnd = true;
+                    }
                     break;
                 }
             }
             if (!isFound) {
-                TrieNode newTN = new TrieNode(word.charAt(i));
-                tn.next.add(newTN);
-                i++;
                 while (i < word.length()) {
                     TrieNode tmpNode = new TrieNode(word.charAt(i));
-                    newTN.next.add(tmpNode);
+                    tn.next.add(tmpNode);
+                    tn = tmpNode;
                     i++;
-                    newTN = tmpNode;
+                    if (i == word.length()) {
+                        tmpNode.isEnd = true;
+                    }
                 }
                 return;
             }
@@ -52,13 +64,67 @@ public class Trie {
 
     // Returns if the word is in the trie.
     public boolean search(String word) {
-        return false;
+        boolean isFound = false;
+        int i = 0;
+        TrieNode tn = root;
+        while (i < word.length()) {
+            isFound = false;
+            for (Iterator<TrieNode> iter = tn.next.iterator(); iter.hasNext();) {
+                TrieNode curNode = iter.next();
+                if (word.charAt(i) == curNode.val) {
+                    isFound = true;
+                    i++;
+                    tn = curNode;
+                    if (i == word.length()) {
+                        return curNode.isEnd;
+                    }
+                    break;
+                }
+            }
+            if (!isFound) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Returns if there is any word in the trie
     // that starts with the given prefix.
     public boolean startsWith(String prefix) {
-        return false;
+        boolean isFound = false;
+        int i = 0;
+        TrieNode tn = root;
+        while (i < prefix.length()) {
+            isFound = false;
+            for (Iterator<TrieNode> iter = tn.next.iterator(); iter.hasNext();) {
+                TrieNode curNode = iter.next();
+                if (prefix.charAt(i) == curNode.val) {
+                    isFound = true;
+                    i++;
+                    tn = curNode;
+                    break;
+                }
+            }
+            if (!isFound) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+        trie.insert("hello");
+        trie.insert("hope");
+        trie.insert("hi");
+        trie.insert("thankyou");
+        trie.insert("bye");
+        trie.insert("a");
+        System.out.println(trie.search("he"));
+        System.out.println(trie.startsWith("he"));
+        System.out.println(trie.search("a"));
+        System.out.println(trie.startsWith("a"));
+        System.out.println("end");
     }
 }
 
