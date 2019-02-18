@@ -1,0 +1,36 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        
+        StringBuffer[] sbs = new StringBuffer[numRows];
+        for (int i = 0; i < numRows; i++) {
+            sbs[i] = new StringBuffer();
+        }
+        
+        int direction = 1;
+        int j = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (direction == 1) {
+                sbs[j++].append(s.charAt(i));
+                if (j == numRows) {
+                    direction = 0;
+                    j--;
+                }
+            } else {
+                sbs[--j].append(s.charAt(i));
+                if (j == 0) {
+                    direction = 1;
+                    j++;
+                }
+            }
+        }
+        
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < numRows; i++) {
+            result.append(sbs[i]);
+        }
+        return result.toString();
+    }
+}
