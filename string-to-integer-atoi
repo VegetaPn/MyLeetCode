@@ -1,0 +1,31 @@
+class Solution {
+    public int myAtoi(String str) {
+        if (null == str || str.length() == 0 || str.trim().length() == 0) {
+            return 0;
+        }
+        
+        String trimed = str.trim();
+        int f = 1;
+        if (trimed.charAt(0) == '-') {
+            f = -1;
+        }
+        
+        int result = 0;
+        int begin = trimed.charAt(0) == '-' || trimed.charAt(0) == '+' ? 1 : 0;
+        
+        for (int i = begin; i < trimed.length(); i++) {
+            if (trimed.charAt(i) >= '0' && trimed.charAt(i) <= '9') {
+                if (Integer.MAX_VALUE / 10 < result || Integer.MAX_VALUE / 10 == result && Integer.MAX_VALUE % 10 < trimed.charAt(i) - '0') {
+                    result = f == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                    return result;
+                }
+                result = result * 10 + trimed.charAt(i) - '0';
+            } else {
+                break;
+            }
+        }
+        
+        result = f * result;
+        return result;
+    }
+}
