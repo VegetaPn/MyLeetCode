@@ -1,0 +1,26 @@
+class Solution {
+    private static final Map<Character, Integer> romanToInt = new HashMap();
+    
+    static {
+        romanToInt.put('I', 1);
+        romanToInt.put('V', 5);
+        romanToInt.put('X', 10);
+        romanToInt.put('L', 50);
+        romanToInt.put('C', 100);
+        romanToInt.put('D', 500);
+        romanToInt.put('M', 1000);
+    }
+    
+    public int romanToInt(String s) {
+        int result = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int curVal = romanToInt.get(s.charAt(i));
+            if (i != s.length() - 1 && curVal < romanToInt.get(s.charAt(i+1))) {
+                result -= curVal;
+            } else {
+                result += curVal;
+            }
+        }
+        return result;
+    }
+}
